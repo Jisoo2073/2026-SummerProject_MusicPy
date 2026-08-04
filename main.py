@@ -23,7 +23,7 @@ class MusicPlayer(QWidget):
         super().__init__()
 
         # Widgets
-        self.resume_button = QPushButton("Resume",self) #self set the parent class
+        self.play_button = QPushButton("Play",self)
         self.pause_button = QPushButton("Pause",self)
         self.next_button = QPushButton("Next", self)
         self.previous_button = QPushButton("Previous", self)
@@ -40,12 +40,25 @@ class MusicPlayer(QWidget):
         self.instance = vlc.Instance() # Factory
         self.music_player = self.instance.media_player_new() # Create a player from VLC factory
         
-        self.init_ui()
+        self.init_ui() # apply the layout
+
+        # Connect Signals
+        self.add_music_button.clicked.connect(self.add_music)
+        self.play_button.clicked.connect(self.play_music)
+        self.pause_button.clicked.connect(self.pause_music)
+        self.next_button.clicked.connect(self.next_music)
+        self.previous_button.clicked.connect(self.previous_music)
+
+        # State variables
+        self.music_files = []
+        self.current_index = -1
+        self.is_paused = False
+
 
     
 
     def init_ui(self):
-        self.setWindowTitle("Py Music Player (v0.1)")
+        self.setWindowTitle("Py Music Player (v0.2)")
         self.resize(700,500)
 
         main_layout = QHBoxLayout()  # playlist left / control pad right
@@ -62,7 +75,7 @@ class MusicPlayer(QWidget):
 
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.previous_button)
-        button_layout.addWidget(self.resume_button)
+        button_layout.addWidget(self.play_button)
         button_layout.addWidget(self.pause_button)
         button_layout.addWidget(self.next_button)
 
@@ -87,10 +100,43 @@ class MusicPlayer(QWidget):
 
         self.setLayout(main_layout)
 
+        
+    # Each function for the widget
     def add_music(self):
-        pass
+        files, _ = QFileDialog.getOpenFileNames(
+            self,
+            "Select Music",
+            "",
+            "AudioFiles (*.mp3 *.wav *.flac)"
+        )
+
+        if not files:
+            return
+        for file in files:
+            self.music_files.append(file)
+            self.playlist.addItem(os.path.basename(file)) # Add song in the playlist widget
+
+        
+
     def play_music(self):
-        pass
+        
+        if not self.music_files:
+            return
+
+         # set the first song to play
+        if self.current_index == -1:
+            self.current_index = 0
+
+        # Load the song to play
+        song = self.music_files[self.current_index]
+
+        # Insert the song in the player
+        media = self.instance.media_new(song)
+        self.music_player.set_media(media)
+
+        self.music_player.play()
+        
+        
     def pause_music(self):
         pass
     def next_music(self):
