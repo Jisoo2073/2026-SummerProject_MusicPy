@@ -23,7 +23,7 @@ class MusicPlayer(QWidget):
         super().__init__()
 
         # Widgets
-        self.play_button = QPushButton("Play",self) #self set the parent class
+        self.resume_button = QPushButton("Resume",self) #self set the parent class
         self.pause_button = QPushButton("Pause",self)
         self.next_button = QPushButton("Next", self)
         self.previous_button = QPushButton("Previous", self)
@@ -35,9 +35,14 @@ class MusicPlayer(QWidget):
 
         self.album_cover = QLabel(self)
         self.album_cover.setFixedSize(250,250)
+
+        # VLC init
+        self.instance = vlc.Instance() # Factory
+        self.music_player = self.instance.media_player_new() # Create a player from VLC factory
         
         self.init_ui()
 
+    
 
     def init_ui(self):
         self.setWindowTitle("Py Music Player (v0.1)")
@@ -57,7 +62,7 @@ class MusicPlayer(QWidget):
 
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.previous_button)
-        button_layout.addWidget(self.play_button)
+        button_layout.addWidget(self.resume_button)
         button_layout.addWidget(self.pause_button)
         button_layout.addWidget(self.next_button)
 
@@ -81,6 +86,17 @@ class MusicPlayer(QWidget):
         
 
         self.setLayout(main_layout)
+
+    def add_music(self):
+        pass
+    def play_music(self):
+        pass
+    def pause_music(self):
+        pass
+    def next_music(self):
+        pass
+    def previous_music(self):
+        pass
 
 
 # How does the window works
