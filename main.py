@@ -119,26 +119,35 @@ class MusicPlayer(QWidget):
         
 
     def play_music(self):
-        
-        if not self.music_files:
-            return
+            # if the song was paused state, resume the song we play.
+        if self.is_paused:
+            self.music_player.play()
+            self.is_paused = False
+        else:
 
-         # set the first song to play
-        if self.current_index == -1:
-            self.current_index = 0
+            if not self.music_files:
+                return
 
-        # Load the song to play
-        song = self.music_files[self.current_index]
+            # set the first song to play
+            if self.current_index == -1:
+                self.current_index = 0
 
-        # Insert the song in the player
-        media = self.instance.media_new(song)
-        self.music_player.set_media(media)
 
-        self.music_player.play()
+            # Load the song to play
+            song = self.music_files[self.current_index]
+
+            # Insert the song in the player
+            media = self.instance.media_new(song)
+            self.music_player.set_media(media)
+
+            self.music_player.play()
+            print(f"Now playing : {song}")
         
         
     def pause_music(self):
-        pass
+        self.music_player.pause()
+        self.is_paused = True
+
     def next_music(self):
         pass
     def previous_music(self):
