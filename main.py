@@ -141,7 +141,7 @@ class MusicPlayer(QWidget):
             self.music_player.set_media(media)
 
             self.music_player.play()
-            print(f"Now playing : {song}")
+            print(f"Now playing : {os.path.basename(song)}")
         
         
     def pause_music(self):
@@ -149,9 +149,27 @@ class MusicPlayer(QWidget):
         self.is_paused = True
 
     def next_music(self):
-        pass
+        if not self.music_files:
+            return
+        self.current_index += 1
+        
+        if self.current_index >= len(self.music_files):
+            self.current_index = 0 # Return to the first song
+
+        self.playlist.setCurrentRow(self.current_index) # Show the next song
+        self.is_paused = False
+        self.play_music()
+        
     def previous_music(self):
-        pass
+        if not self.music_files:
+            return
+        self.current_index -= 1
+
+        if self.current_index < 0:
+            self.current_index = 0
+        self.playlist.setCurrentRow(self.current_index) # Show the next song
+        self.is_paused = False
+        self.play_music()
 
 
 # How does the window works
