@@ -36,6 +36,9 @@ class MusicPlayer(QWidget):
         self.album_cover = QLabel(self)
         self.album_cover.setFixedSize(250,250)
 
+        self.song_title = QLabel("No song selected")
+        self.artist_name = QLabel("Unknown Artist")
+
         # VLC init
         self.instance = vlc.Instance() # Factory
         self.music_player = self.instance.media_player_new() # Create a player from VLC factory
@@ -71,6 +74,8 @@ class MusicPlayer(QWidget):
         # ControlPad Part
         right_layout = QVBoxLayout()
         right_layout.addWidget(self.album_cover)
+        right_layout.addWidget(self.song_title) #Set the song title
+        right_layout.addWidget(self.artist_name)   #Set the artist name
         right_layout.addWidget(self.positionSlider)
 
         button_layout = QHBoxLayout()
